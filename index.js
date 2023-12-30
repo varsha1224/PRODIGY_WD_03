@@ -1,101 +1,76 @@
-var currentPlayer = 'X';
+// index.js
 
-function makeMove(cellId) 
-{
-  var cell = document.getElementById(cellId);
+const board = document.getElementById('board');
+const resultDisplay = document.getElementById('result');
+let currentPlayer = 'X';
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
+let gameActive = true;
 
-  if (cell.value === '' && !isGameFinished()) 
-  {
-    cell.value = currentPlayer;
-    cell.disabled = true;
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    updateGameStatus();
+function createCell(index) {
+  const cell = document.createElement('div');
+  cell.classList.add('cell');
+  cell.dataset.index = index;
+  cell.addEventListener('click', () => cellClick(index));
+  board.appendChild(cell);
+}
+
+function initializeBoard() {
+  for (let i = 0; i < 9; i++) {
+    createCell(i);
   }
 }
 
-function isGameFinished() 
-{
-  return (
-    isWinner('X') || isWinner('O') || document.querySelectorAll('.cell[disabled]').length === 9
-  );
+function cellClick(index) {
+  if (!gameActive || gameBoard[index] !== '') return;
+
+  gameBoard[index] = currentPlayer;
+  updateBoard();
+  checkWinner();
+
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
 }
 
-function isWinner(player) 
-{
-  var lines = [
-    ['b1', 'b2', 'b3'],
-    ['b4', 'b5', 'b6'],
-    ['b7', 'b8', 'b9'],
-    ['b1', 'b4', 'b7'],
-    ['b2', 'b5', 'b8'],
-    ['b3', 'b6', 'b9'],
-    ['b1', 'b5', 'b9'],
-    ['b3', 'b5', 'b7'],
+function updateBoard() {
+  const cells = document.querySelectorAll('.cell');
+  cells.forEach((cell, index) => {
+    cell.textContent = gameBoard[index];
+  });
+}
+
+function checkWinner() {
+  const winPatterns = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
   ];
 
-  for (var i = 0; i < lines.length; i++) 
-  {
-    var [a, b, c] = lines[i];
-    if (document.getElementById(a).value === player &&
-      document.getElementById(b).value === player &&
-      document.getElementById(c).value === player) 
-    {
-      highlightWinnerCells(a, b, c);
-      return true;
+  for (const pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+      resultDisplay.textContent = `${currentPlayer} won!`;
+      gameActive = false;
+      return;
     }
   }
 
-  return false;
-}
-
-function highlightWinnerCells(cell1, cell2, cell3) 
-{
-  document.getElementById(cell1).style.color = '#FF5200';
-  document.getElementById(cell2).style.color = '#FF5200';
-  document.getElementById(cell3).style.color = '#FF5200';
-}
-
-function updateGameStatus() 
-{
-  if (isWinner('X')) 
-  {
-    document.getElementById('print').innerHTML = 'Player X won';
-    disableAllCells();
-  } 
-  else if (isWinner('O')) 
-  {
-    document.getElementById('print').innerHTML = 'Player O won';
-    disableAllCells();
-  } 
-  else if (document.querySelectorAll('.cell[disabled]').length === 9) 
-  {
-    document.getElementById('print').innerHTML = 'Match Tie';
-  } 
-  else 
-  {
-    document.getElementById('print').innerHTML = `Player ${currentPlayer} Turn`;
+  if (!gameBoard.includes('')) {
+    resultDisplay.textContent = 'It\'s a draw!';
+    gameActive = false;
+    return;
   }
 }
 
-function disableAllCells() 
-{
-  var cells = document.querySelectorAll('.cell');
-  cells.forEach(cell => 
-  {
-    cell.disabled = true;
-  });
-}
-
-function resetGame() 
-{
-  var cells = document.querySelectorAll('.cell');
-  cells.forEach(cell => 
-  {
-    cell.value = '';
-    cell.style.color = '';
-    cell.disabled = false;
-  });
-
-  document.getElementById('print').innerHTML = '';
+function resetGame() {
+  gameBoard = ['', '', '', '', '', '', '', '', ''];
   currentPlayer = 'X';
+  gameActive = true;
+  resultDisplay.textContent = '';
+  updateBoard();
 }
+
+initializeBoard();
