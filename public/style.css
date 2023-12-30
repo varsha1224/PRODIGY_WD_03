@@ -54,12 +54,11 @@ body {
 
 button {
     margin: 60px 10px;
-    padding: 15px 30px; /* Increased length */
+    padding: 15px 30px; 
     border: none;
-    border-radius: 10px; /* Rounded edges */
-    font-size: 1.5em;
+    border-radius: 10px; 
     cursor: pointer;
-    background: linear-gradient(to right, #F21170, #FA9905); /* Linear gradient color */
+    background: linear-gradient(to right, #F21170, #FA9905); 
     color: #fff;
     transition: background 0.3s ease-in-out;
     font-family: 'Chakra Petch', sans-serif;
@@ -67,7 +66,7 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(to right, #FA9905, #F21170); /* Change gradient on hover */
+    background: linear-gradient(to right, #FA9905, #F21170); 
 }
 
 .board {
@@ -90,13 +89,13 @@ button:hover {
     cursor: pointer;
     font-family: 'Silkscreen', sans-serif;
     color: #111D5E;
-    background: linear-gradient(to right, #F21170, #FA9905); /* Linear gradient color */
+    background: linear-gradient(to right, #F21170, #FA9905);
     color: #111D5E;
     transition: background 0.3s ease-in-out;
   }
 
   .cell:hover {
-    background: linear-gradient(to right, #FA9905, #F21170); /* Change gradient on hover */
+    background: linear-gradient(to right, #FA9905, #F21170); 
 }
 
   .reset-btn {
@@ -108,7 +107,7 @@ button:hover {
   }
 
   #result {
-    color: #FF5200; /* Change X won or O won message color */
+    color: #FF5200; 
     font-size: 1.5em;
     margin-top: 10px;
     font-family: 'Silkscreen', sans-serif;
